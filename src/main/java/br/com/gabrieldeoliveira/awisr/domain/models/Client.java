@@ -1,7 +1,12 @@
 package br.com.gabrieldeoliveira.awisr.domain.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.Objects;
 
 @Getter
 @Builder
@@ -26,4 +31,11 @@ public class Client {
 
     @Column(length = 11, nullable = false)
     private String phone;
+
+    public void updateWith(Client newData) {
+        if (Objects.nonNull(newData.email) && !newData.email.isBlank())
+            email = newData.email;
+        if (Objects.nonNull(newData.phone) && !newData.phone.isBlank())
+            phone = newData.phone;
+    }
 }
