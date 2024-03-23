@@ -1,6 +1,6 @@
 package br.com.gabrieldeoliveira.awisr.domain.services;
 
-import br.com.gabrieldeoliveira.awisr.domain.EntityNotFoundException;
+import br.com.gabrieldeoliveira.awisr.domain.exceptions.EntityNotFoundException;
 import br.com.gabrieldeoliveira.awisr.domain.models.Client;
 import br.com.gabrieldeoliveira.awisr.domain.repositories.ClientRepository;
 import lombok.AllArgsConstructor;
@@ -37,7 +37,7 @@ public class ClientCrudService {
     }
 
     @Transactional
-    public Client updateClientWithId(Long id, Client newData) {
+    public Client updateWith(Long id, Client newData) {
         Client found = findById(id);
         found.updateWith(newData);
         return found;

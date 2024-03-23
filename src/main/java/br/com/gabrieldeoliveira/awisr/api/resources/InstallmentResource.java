@@ -1,10 +1,9 @@
 package br.com.gabrieldeoliveira.awisr.api.resources;
 
 import br.com.gabrieldeoliveira.awisr.domain.models.Client;
-import br.com.gabrieldeoliveira.awisr.domain.repositories.ClientRepository;
-import br.com.gabrieldeoliveira.awisr.domain.services.ClientCrudService;
+import br.com.gabrieldeoliveira.awisr.domain.models.Installment;
+import br.com.gabrieldeoliveira.awisr.domain.services.InstallmentCrudService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,43 +12,42 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/clients")
+@RequestMapping("/installments")
 @AllArgsConstructor
-public class ClientResource {
+public class InstallmentResource {
 
-    private ClientCrudService clientCrudService;
+    private InstallmentCrudService installmentCrudService;
 
     @GetMapping
-    ResponseEntity<List<Client>> findAll() {
-        List<Client> all = clientCrudService.findAll();
+    ResponseEntity<List<Installment>> findAll() {
+        List<Installment> all = installmentCrudService.findAll();
         return ResponseEntity.ok(all);
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<Client> findById(@PathVariable Long id, HttpServletResponse response) {
-        Client found = clientCrudService.findById(id);
+    ResponseEntity<Installment> findById(@PathVariable Long id) {
+        Installment found = installmentCrudService.findById(id);
         return ResponseEntity.ok(found);
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<Client> deleteById(@PathVariable Long id) {
-        clientCrudService.deleteById(id);
+    ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        installmentCrudService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<Client> updateById(@PathVariable Long id, @RequestBody Client newData) {
-        Client updated = clientCrudService.updateWith(id, newData);
+    ResponseEntity<Installment> updateById(@PathVariable Long id, @RequestBody Installment newData) {
+        Installment updated = installmentCrudService.updateWith(id, newData);
         return ResponseEntity.ok(updated);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<Void> create(@RequestBody Client client, HttpServletRequest request) {
-        Client created = clientCrudService.create(client);
+    ResponseEntity<Void> create(@RequestBody Installment installment, HttpServletRequest request) {
+        Installment created = installmentCrudService.create(installment);
         URI uri = UriComponentsBuilder
                 .fromUriString(request.getRequestURL().toString())
                 .path("/{id}").buildAndExpand(created.getId())

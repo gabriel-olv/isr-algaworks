@@ -1,4 +1,4 @@
-package br.com.gabrieldeoliveira.awisr.domain;
+package br.com.gabrieldeoliveira.awisr.domain.exceptions;
 
 public class EntityNotFoundException extends RuntimeException {
 
