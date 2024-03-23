@@ -6,13 +6,12 @@ import br.com.gabrieldeoliveira.awisr.domain.exceptions.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadRequestException.class)
@@ -22,6 +21,7 @@ public class GlobalExceptionHandler {
                 Instant.now(),
                 status,
                 "Bad Request",
+                request.getRequestURI(),
                 ex.getMessage());
         return ResponseEntity.status(status).body(error);
     }
@@ -33,6 +33,7 @@ public class GlobalExceptionHandler {
                 Instant.now(),
                 status,
                 "Not Found",
+                request.getRequestURI(),
                 ex.getMessage());
         return ResponseEntity.status(status).body(error);
     }

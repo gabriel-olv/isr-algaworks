@@ -10,8 +10,8 @@ public class StandardError extends AbstractError {
 
     private String message;
 
-    public StandardError(Instant timestamp, Integer status, String title, String message) {
-        super(timestamp, status, title);
+    public StandardError(Instant timestamp, Integer status, String title, String path, String message) {
+        super(timestamp, status, title, path);
         this.message = message;
     }
 }
