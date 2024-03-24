@@ -6,6 +6,7 @@ import br.com.gabrieldeoliveira.awisr.api.models.client.UpdateClient;
 import br.com.gabrieldeoliveira.awisr.domain.models.Client;
 import br.com.gabrieldeoliveira.awisr.domain.services.ClientCrudService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,14 +43,14 @@ public class ClientResource {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<ShowingClient> updateById(@PathVariable Long id, @RequestBody UpdateClient newData) {
+    ResponseEntity<ShowingClient> updateById(@PathVariable Long id, @RequestBody @Valid UpdateClient newData) {
         Client updated = clientCrudService.updateWith(id, newData.toEntity());
         return ResponseEntity.ok(ShowingClient.fromEntity(updated));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<Void> create(@RequestBody NewClient newClient, HttpServletRequest request) {
+    ResponseEntity<Void> create(@RequestBody @Valid NewClient newClient, HttpServletRequest request) {
         Client created = clientCrudService.create(newClient.toEntity());
         URI uri = UriComponentsBuilder
                 .fromUriString(request.getRequestURL().toString())

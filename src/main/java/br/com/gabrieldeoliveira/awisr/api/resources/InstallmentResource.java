@@ -6,6 +6,7 @@ import br.com.gabrieldeoliveira.awisr.api.models.installment.UpdateInstallment;
 import br.com.gabrieldeoliveira.awisr.domain.models.Installment;
 import br.com.gabrieldeoliveira.awisr.domain.services.InstallmentCrudService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,14 +42,14 @@ public class InstallmentResource {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<ShowingInstallment> updateById(@PathVariable Long id, @RequestBody UpdateInstallment newData) {
+    ResponseEntity<ShowingInstallment> updateById(@PathVariable Long id, @RequestBody @Valid UpdateInstallment newData) {
         Installment updated = installmentCrudService.updateWith(id, newData.toEntity());
         return ResponseEntity.ok(ShowingInstallment.fromEntity(updated));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<Void> create(@RequestBody NewInstallment newInstallment, HttpServletRequest request) {
+    ResponseEntity<Void> create(@RequestBody @Valid NewInstallment newInstallment, HttpServletRequest request) {
         Installment created = installmentCrudService.create(newInstallment.toEntity());
         URI uri = URI.create(request.getRequestURL().toString() + "/" + created.getId());
         return ResponseEntity.created(uri).build();
