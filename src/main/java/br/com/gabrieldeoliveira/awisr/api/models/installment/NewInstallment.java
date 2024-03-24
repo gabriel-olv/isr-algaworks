@@ -1,6 +1,5 @@
 package br.com.gabrieldeoliveira.awisr.api.models.installment;
 
-import br.com.gabrieldeoliveira.awisr.api.models.InputModel;
 import br.com.gabrieldeoliveira.awisr.domain.models.Client;
 import br.com.gabrieldeoliveira.awisr.domain.models.Installment;
 import lombok.Getter;
@@ -12,14 +11,13 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
-public class NewInstallment implements InputModel<Installment> {
+public class NewInstallment {
 
     private String description;
     private Integer installments;
     private BigDecimal totalValue;
     private Long ownerId;
 
-    @Override
     public Installment toEntity() {
         Client owner = new Client();
         owner.setId(ownerId);
