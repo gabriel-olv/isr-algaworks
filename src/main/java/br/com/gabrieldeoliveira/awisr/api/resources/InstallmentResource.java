@@ -23,16 +23,15 @@ public class InstallmentResource {
 
     @GetMapping
     ResponseEntity<List<ShowingInstallment>> findAll() {
-        List<Installment> all = installmentCrudService.findAll();
-        List<ShowingInstallment> showingInstallments = all.stream().map(ShowingInstallment::fromEntity).toList();
-        return ResponseEntity.ok(showingInstallments);
+        List<ShowingInstallment> all = installmentCrudService.findAll()
+                .stream().map(ShowingInstallment::fromEntity).toList();
+        return ResponseEntity.ok(all);
     }
 
     @GetMapping("/{id}")
     ResponseEntity<ShowingInstallment> findById(@PathVariable Long id) {
         Installment found = installmentCrudService.findById(id);
-        ShowingInstallment showingInstallment = ShowingInstallment.fromEntity(found);
-        return ResponseEntity.ok(showingInstallment);
+        return ResponseEntity.ok(ShowingInstallment.fromEntity(found));
     }
 
     @DeleteMapping("/{id}")
@@ -44,8 +43,7 @@ public class InstallmentResource {
     @PutMapping("/{id}")
     ResponseEntity<ShowingInstallment> updateById(@PathVariable Long id, @RequestBody UpdateInstallment newData) {
         Installment updated = installmentCrudService.updateWith(id, newData.toEntity());
-        ShowingInstallment showingInstallment = ShowingInstallment.fromEntity(updated);
-        return ResponseEntity.ok(showingInstallment);
+        return ResponseEntity.ok(ShowingInstallment.fromEntity(updated));
     }
 
     @PostMapping

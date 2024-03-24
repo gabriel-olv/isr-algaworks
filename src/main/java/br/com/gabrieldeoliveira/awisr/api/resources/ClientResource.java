@@ -1,10 +1,11 @@
 package br.com.gabrieldeoliveira.awisr.api.resources;
 
+import br.com.gabrieldeoliveira.awisr.api.models.client.NewClient;
+import br.com.gabrieldeoliveira.awisr.api.models.client.ShowingClient;
+import br.com.gabrieldeoliveira.awisr.api.models.client.UpdateClient;
 import br.com.gabrieldeoliveira.awisr.domain.models.Client;
-import br.com.gabrieldeoliveira.awisr.domain.repositories.ClientRepository;
 import br.com.gabrieldeoliveira.awisr.domain.services.ClientCrudService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/clients")
@@ -23,33 +23,34 @@ public class ClientResource {
     private ClientCrudService clientCrudService;
 
     @GetMapping
-    ResponseEntity<List<Client>> findAll() {
-        List<Client> all = clientCrudService.findAll();
+    ResponseEntity<List<ShowingClient>> findAll() {
+        List<ShowingClient> all = clientCrudService.findAll().stream()
+                .map(ShowingClient::fromEntity).toList();
         return ResponseEntity.ok(all);
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<Client> findById(@PathVariable Long id, HttpServletResponse response) {
+    ResponseEntity<ShowingClient> findById(@PathVariable Long id) {
         Client found = clientCrudService.findById(id);
-        return ResponseEntity.ok(found);
+        return ResponseEntity.ok(ShowingClient.fromEntity(found));
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<Client> deleteById(@PathVariable Long id) {
+    ResponseEntity<Void> deleteById(@PathVariable Long id) {
         clientCrudService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<Client> updateById(@PathVariable Long id, @RequestBody Client newData) {
-        Client updated = clientCrudService.updateWith(id, newData);
-        return ResponseEntity.ok(updated);
+    ResponseEntity<ShowingClient> updateById(@PathVariable Long id, @RequestBody UpdateClient newData) {
+        Client updated = clientCrudService.updateWith(id, newData.toEntity());
+        return ResponseEntity.ok(ShowingClient.fromEntity(updated));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<Void> create(@RequestBody Client client, HttpServletRequest request) {
-        Client created = clientCrudService.create(client);
+    ResponseEntity<Void> create(@RequestBody NewClient newClient, HttpServletRequest request) {
+        Client created = clientCrudService.create(newClient.toEntity());
         URI uri = UriComponentsBuilder
                 .fromUriString(request.getRequestURL().toString())
                 .path("/{id}").buildAndExpand(created.getId())
